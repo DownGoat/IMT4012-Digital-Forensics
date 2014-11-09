@@ -143,7 +143,7 @@ disk is the \textit{Host Protected Area} (HPA) which can be used to block a OS
 from accessing the end of a drive. For more information about HPA see the 
 footnote.\footnote{https://en.wikipedia.org/wiki/Host\_protected\_area}
 
-\subsubsection{DOS Partitions}
+\subsection{DOS Partitions}
 DOS-based partitions are used by all x86 systems. The first 512 bytes of the
 partition is the MBR. MBR contains boot code (0x0000), partition table (0x01BE)
 , and a signature value (0x01FE).
@@ -153,7 +153,7 @@ partition. Addressing information, Number of sectors in partition, Type of
 partition, Flags. Example of partition types (0x01 - FAT12, 0x05 - Extended, 
 0x07 - NTFS, 0x0C - FAT32, 0x0E FAT16, 0x83 - Linux Native, 0xA5 - BSD/386 ).
 
-\subsubsection{Disk Analysis}
+\subsection{Disk Analysis}
 \begin{figure}[h]
     \centering\includegraphics[scale=0.5]{disk_data_units.png}
 \end{figure}
@@ -170,7 +170,7 @@ in a cluster. Slackspace and unallocated blocks are sources for deleted data.
     \centering\includegraphics[scale=1]{slack_space.jpg}
 \end{figure}
 
-\subsubsection{Windows Metadata}
+\subsection{Windows Metadata}
 FAT directory entries: file name, long file name, MAC times (modification, 
 access, creation), file size, first cluster number. NTFS: Master File Table
 (MFT) entries: Standard information, file name, data. When deletining files on a
@@ -179,7 +179,7 @@ preserved, file type, size etc are preserved. The clusters will be marked as
 unallocated but the data will be preserved. On NTFS nothing is tuched, but the
 clusters are marked as unallocated. 
 
-\subsubsection{UNIX Metadata}
+\subsection{UNIX Metadata}
 UNIX file systems are organized within a single tree struture underneath one 
 root directory. Disk partitions are mounted at some directory in the file 
 system tree. A directory is organized as a sequence of directory entries. It 
@@ -195,61 +195,26 @@ allocation bitmap, but the contents are left alone.
 
 
 \subsection{Live Forensics}
-    Considerations:
-        OOV - If you want data in memory you need to do live forensics.
-        
-        Storing evidence remotely - If evidence is on network shares or
-        in the cloud
-
-        Using trusted tools - When dealing with compromised systems you 
-        cannot trust the systems tool, you need to bring external tools.
-
-    Motivation:
-        System subversion - Hacked systems, a lot of information will be
-        in the system state such as network stack and memory.
-
-        Encryption and passwords - You need to do live forensics, if it
-        is shut down and you do not know the password then you need to do it
-        live
-
-        Running applications - Text in documents that are not saved
-
-        Open network connections - Investigating p2p networks you will want
-        to know which other computers it is talking too.
+Sometime you got to collect the evidence live on the computer, a typicall 
+case is when you belive there is encryption involved. If the system is powered
+down and you do not know they key then you are left with bruteforce attacks. 
+Live forensics also give you access to other information that cannot else be
+found such as running applications (something might be entered into the 
+application that is not saved to disk). Active network connections, and if the
+computer has been comprimised a lot of the information will be in the system
+state. When doing live forensics you have to consider some things such as the
+order of votality, you have to prioritize what data you want, because if you
+access some of it it will affect some other data. You will also need to bring
+the tools you need to use, as you cannot trust the information from the system.
+If the computer is compromised and there is a rootkit present or some other 
+piece of malware, then they can alter the information that is returned from
+system tools. Memory can be found in many sources, such as RAM swap space and
+hibernation files.
 
 \begin{figure}[h]                                                                                                                 
     \centering\includegraphics[scale=0.5]{oov.png}
     \caption{Table showing the life time of the different data types}
 \end{figure}
-
-    OOV  expected lifetime of data table.
-
-    WHich order
-        Memory dump
-
-        Process info
-        Network info
-        File MAC times
-        File system
-
-    if you choose one the other will deteriorate. 
-
-    A rootkit can alter the data from process and system status tools.
-    Rootkits
-    Command level rootkits hide their presence through changing system
-    commands.
-
-    Library level rootkits hide their presence through changing system run time
-    libs
-
-    Kernel level rootkits hide their presence through changing the system
-    kernel.
-
-    Computer Memory
-    Memory can be found in many sources, RAM swap space Hibernation files.
-
-    Memory analysis
-    Fragments of files can be found by searching for hashes.
 
 \subsection{Remote Foresincs}
     Get data a from a remote computer.

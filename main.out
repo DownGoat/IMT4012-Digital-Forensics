@@ -1,8 +1,12 @@
 \BOOKMARK [0][-]{chapter.1}{File Systems and Live Forensics}{}% 1
 \BOOKMARK [1][-]{subsection.1.0.1}{File System Forensics}{chapter.1}% 2
-\BOOKMARK [2][-]{subsection.1.0.2}{Live Forensics}{subsection.1.0.1}% 3
-\BOOKMARK [2][-]{subsection.1.0.3}{Remote Foresincs}{subsection.1.0.1}% 4
-\BOOKMARK [0][-]{chapter*.6}{Bibliography}{}% 5
-\BOOKMARK [1][-]{section*.7}{Books}{chapter*.6}% 6
-\BOOKMARK [1][-]{section*.8}{Articles}{chapter*.6}% 7
-\BOOKMARK [0][-]{section*.9}{Index}{}% 8
+\BOOKMARK [2][-]{subsection.1.0.2}{DOS Partitions}{subsection.1.0.1}% 3
+\BOOKMARK [2][-]{subsection.1.0.3}{Disk Analysis}{subsection.1.0.1}% 4
+\BOOKMARK [2][-]{subsection.1.0.4}{Windows Metadata}{subsection.1.0.1}% 5
+\BOOKMARK [2][-]{subsection.1.0.5}{UNIX Metadata}{subsection.1.0.1}% 6
+\BOOKMARK [2][-]{subsection.1.0.6}{Live Forensics}{subsection.1.0.1}% 7
+\BOOKMARK [2][-]{subsection.1.0.7}{Remote Foresincs}{subsection.1.0.1}% 8
+\BOOKMARK [0][-]{chapter*.2}{Bibliography}{}% 9
+\BOOKMARK [1][-]{section*.3}{Books}{chapter*.2}% 10
+\BOOKMARK [1][-]{section*.4}{Articles}{chapter*.2}% 11
+\BOOKMARK [0][-]{section*.5}{Index}{}% 12
