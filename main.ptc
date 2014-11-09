@@ -7,15 +7,23 @@
 \defcounter {refsection}{0}\relax 
 \contentsline {subsection}{\numberline {1.0.1}File System Forensics}{6}{subsection.1.0.1}
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {1.0.2}Live Forensics}{8}{subsection.1.0.2}
+\contentsline {subsubsection}{DOS Partitions}{8}{section*.2}
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {1.0.3}Remote Foresincs}{9}{subsection.1.0.3}
+\contentsline {subsubsection}{Disk Analysis}{8}{section*.3}
 \defcounter {refsection}{0}\relax 
-\contentsline {chapter}{\leavevmode {\color {ocre}Bibliography}}{11}{chapter*.2}
+\contentsline {subsubsection}{Windows Metadata}{8}{section*.4}
 \defcounter {refsection}{0}\relax 
-\contentsline {section}{Books}{11}{section*.3}
+\contentsline {subsubsection}{UNIX Metadata}{9}{section*.5}
 \defcounter {refsection}{0}\relax 
-\contentsline {section}{Articles}{11}{section*.4}
+\contentsline {subsection}{\numberline {1.0.2}Live Forensics}{9}{subsection.1.0.2}
 \defcounter {refsection}{0}\relax 
-\contentsline {chapter}{\leavevmode {\color {ocre}Index}}{13}{section*.5}
+\contentsline {subsection}{\numberline {1.0.3}Remote Foresincs}{10}{subsection.1.0.3}
+\defcounter {refsection}{0}\relax 
+\contentsline {chapter}{\leavevmode {\color {ocre}Bibliography}}{11}{chapter*.6}
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{Books}{11}{section*.7}
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{Articles}{11}{section*.8}
+\defcounter {refsection}{0}\relax 
+\contentsline {chapter}{\leavevmode {\color {ocre}Index}}{13}{section*.9}
 \contentsfinish 

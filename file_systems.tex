@@ -61,147 +61,138 @@ sound, and the integrity of the evidence is preserved. To do this you connect
 the disk to a write blocker. Write blockers are devices that allow acquisition 
 of information on a drive without creating the possibility of accidentally 
 damaging the drive contents. They do this by allowing read commands to pass but 
-by blocking write commands, hence their name.\\
-
+by blocking write commands, hence their name.
 There are two ways to build a write-blocker: the blocker can allow all commands 
 to pass from the computer to the drive except for those that are on a particular
 list. Alternatively, the blocker can specifically block the write commands and 
-let everything else through.\\
-
+let everything else through.
 Write blockers may also include drive protection which will limit the speed of a
 drive attached to the blocker. Drives that run at higher speed work harder(the 
 head moves back and forth more often due to read errors). This added protection 
 could allow drives that can not be read at high speed (UDMA modes) to be read at 
-the slower modes (PIO).\\
-
+the slower modes (PIO).
 There are two types of write blockers, Native and Tailgate. A Native device uses 
 the same interface on for both in and out, for example a IDE to IDE write block. 
 A Tailgate device uses one interface for one side and a different one for the 
 other, for example a Firewire to SATA write block.
-\footnote{http://www.forensicswiki.org/wiki/Write\_Blockers}\\
-
+\footnote{http://www.forensicswiki.org/wiki/Write\_Blockers}
 Hardware write blockers can be either IDE-to-IDE or Firewire/USB-to-IDE. 
 Simson prefers the IDE-to-IDE because they deal better with errors on the drive 
 and make it easier to access special information that is only accessible over 
-the IDE interface.\\
-
+the IDE interface.
 Software write blockers can be either tailored to an individual operating system
 or can be an independent boot disk. Their main upsides are with ease of use, 
 since they are on a CD and do not require you to open up the case, and speed 
 since they do not become a bottle neck.\\
 
+There are many different types of media where digital evidence can be found, the
+most obvious one is the disk, which there in turn are different types of. Today
+we have the old HDD which are magnetic disks, and the newer SSDs and they pose
+different challenges for the forensic analyst. On HDDs deleted data will persist
+for a long time  if it is not overwritten, and the deleted data can easily be 
+found when cloning the drive. Solid State Drives pose a variety of interesting 
+challenges for computer forensics in comparison with traditional rotating 
+magnetic platter hard drives. Most SSD devices are based on flash memory; some 
+have battery backed SRAM or DRAM with a flash backing store. Flash has a number 
+of key properties that complicate its use in computer storage systems and 
+subsequent forensic analysis:\footnote{http://www.forensicswiki.org/wiki/Solid\_State\_Drives}
+\begin{enumerate}
+    \item Internally, flash memory is not divided into the traditional 512 byte 
+        blocks, but instead is in pages of 2KiB, 4KiB, or larger, although it is
+        still presented to the host computer in blocks
+
+    \item Whilst hard drives can be written in a single pass, flash memory pages
+        must be erased (in whole) before they can be rewritten
+
+    \item Rewriting a block at the operating system level does not necessarily 
+        rewrite the same page in the flash memory due to the controller 
+        remapping data to spread wear or avoid failing pages
+
+    \item Each page can be erased and rewritten a limited number of times – 
+        typically 1000 to 10,000. (Hard drive sectors, in contrast, can be 
+        rewritten millions of times or more.)
+
+    \item Flash data is often encrypted on the drive, and can be "erased" by
+        telling the controller to forget the old key and generate a new one, as
+        well as marking all blocks as unused
+\end{enumerate}
+
+The controller in a flash SSD is significantly more complex in the number of 
+tasks it has to perform in comparison to a magnetic rotating drive, with the 
+following features:
+
+\begin{enumerate}
+    \item \textit{wear leveling} – that is, spreading the writes to flash out 
+        among different sectors. Wear leveling is typically done with a flash 
+        translation layer that maps logical sectors (or LBAs) to physical pages.
+        Most FTLs are contained within the SSD device and are not accessible to 
+        end users.
+
+    \item \textit{read/modify/relocate+write} - if the controller allows 
+        rewriting of a partial flash page, it must read the entire page, modify 
+        the sector that is being written, and write the new flash page in a 
+        new/fresh location which has been previously erased. the old 
+        pre-modification data's page is then queued for erase.
+\end{enumerate}
+There are also a wide range of other media that can store digital evidence, such
+as USB sticks, CDs, DVDs, Floppies, and a thousand other things. If the media is
+encrypted and is powered down you are fucked if you do not know the key. If the
+media is powered on and is in use there are ways to extract the key.
+\footnote{https://en.wikipedia.org/wiki/Cold\_boot\_attack} A thing to note 
+disk is the \textit{Host Protected Area} (HPA) which can be used to block a OS
+from accessing the end of a drive. For more information about HPA see the 
+footnote.\footnote{https://en.wikipedia.org/wiki/Host\_protected\_area}
+
+\subsubsection{DOS Partitions}
+DOS-based partitions are used by all x86 systems. The first 512 bytes of the
+partition is the MBR. MBR contains boot code (0x0000), partition table (0x01BE)
+, and a signature value (0x01FE).
+\footnote{https://en.wikipedia.org/wiki/Master\_boot\_record}
+The partition table contains four entries, each of which can describe a DOS 
+partition. Addressing information, Number of sectors in partition, Type of 
+partition, Flags. Example of partition types (0x01 - FAT12, 0x05 - Extended, 
+0x07 - NTFS, 0x0C - FAT32, 0x0E FAT16, 0x83 - Linux Native, 0xA5 - BSD/386 ).
+
+\subsubsection{Disk Analysis}
+\begin{figure}[h]
+    \centering\includegraphics[scale=0.5]{disk_data_units.png}
+\end{figure}
+A block/cluster can be either allocated or unallocated. Allocated 
+blocks/clusters are in use by a file and the data exists in a file on the file 
+system. Unallocated blocks/clusters are not in use by any files, but they may 
+contain deleted or unused data. Slackspace can be found at the end of sectors or
+at the end of blocks/clusters. This occurs when a file does not fill its entire 
+last sector or block/cluster. Note that most systems pad the end of the last 
+sector of a file, but not the last blocks/clusters. There are two types of
+slackspace, type 1 is unused part of a sector, and type 2 is a unused block
+in a cluster. Slackspace and unallocated blocks are sources for deleted data.
+\begin{figure}[h]
+    \centering\includegraphics[scale=1]{slack_space.jpg}
+\end{figure}
+
+\subsubsection{Windows Metadata}
+FAT directory entries: file name, long file name, MAC times (modification, 
+access, creation), file size, first cluster number. NTFS: Master File Table
+(MFT) entries: Standard information, file name, data. When deletining files on a
+FAT system the file name minus the first letter is preserved, MAC times are 
+preserved, file type, size etc are preserved. The clusters will be marked as 
+unallocated but the data will be preserved. On NTFS nothing is tuched, but the
+clusters are marked as unallocated. 
+
+\subsubsection{UNIX Metadata}
+UNIX file systems are organized within a single tree struture underneath one 
+root directory. Disk partitions are mounted at some directory in the file 
+system tree. A directory is organized as a sequence of directory entries. It 
+contains File name and Inode number. Metadata is stored in the inode blocks,
+some metadata is: ownership, permissions, file type, hard link count, file size
+in bytes, time stamps (MAC, birth, deletion), Data block addresses (direct, 
+single indirect, double indirect, \ldots). When a file is deleted, the directory
+entry and inodenumber is marked as unused. The directory’s last MACtimes are set
+to the time of the update. The inode block is marked as unused in the inode 
+allocation bitmap. The file data blocks are marked as unused in the data block 
+allocation bitmap, but the contents are left alone.
 
 
-
-    Media Analysis
-    Hard drives.
-    Technologies :Magnetic, SSD
-    SSD are much more difficult for digital forensics, deleted data may dissappear compared
-    to magnetic drives where the deleted data can persist for a long time
-    untill it is overwritten.
-
-    Many interfaces; SATA; PATA, SCSI, ATA/IDE
-
-    Disk encryption much more common today, requiers live forensics if
-    you do not have password. If the computer is turned of your shit out of
-    luck.
-    
-    HPA capeable to block OS accessing the harddrive.
-    External media as well, and cloud services.
-
-
-    Layers of abstraction
-    Timestamps are gold mines for establishing time lines.
-
-    DOS Partitions
-    512 first bytes are the MBR, each partition can have a MBR
-
-    A block is either allocated or not. Unallocated may contain data
-    even if they are not used.
-    Slackspace can be found at the end of sectors or block, it occurs
-    when a file does not fill the end of the sector or block, and may
-    contain data from old files.
-
-    Type 1 SS is the unused part of a sector, Type 2 is a unused block
-    in a cluster.
-
-    Slackspace and unallocated blocks are sources for deleted data.
-
-    FAT boot sector
-    name of os
-    sectors per cluster
-    Max number of root dir entries
-    volume name
-    serial number
-
-    NTFS has more info
-    
-    FAT directory entries
-        filename
-        long filename
-        MAC times (creation modification acces)
-        file size
-        first cluster number
-
-    NTFS Master file table entries
-        stadard information
-        file name
-        data
-    
-    Windows delete files
-    Fat: File name minus first letter is perserved, MAC perserved
-    cluster will be marked as unalloced, but the data is perserved.
-
-    NTFS: File name and MFT number preserved,
-    MAC times perserved and used clusters will be marked as un allocated.
-
-    bottom line, everything is there.
-    For magnetic disk this is importaint
-
-    UNIX
-    file systems are organized within a single tree structure
-    underneath one root directory.
-    Disk partition are mounted at some directory in the file
-    system tree.
-
-    UNIX file types:
-    regular files
-    directories
-    symbolic lincs
-    IPC endpoints
-    Device files
-
-    Metadata is stored in inode blocks
-    Unix file deletion
-    The dir entry and inode block are unallocated
-    MAC time stamps are changed, so that information is lost
-    All other data is preserved.
-
-    MAC OS
-    HFS+
-    Volume header
-    allocation blocks
-    Allocation file
-    Catalog file
-
-    5 time stamps
-    Created
-    Content Mod
-    Attribute Modified
-    Accessed
-    Backed Up - If it recent it tells you that it is likely backed up.
-
-    SSD disks
-    SSDS are non volatile
-    Blocks are subdivided into pages
-    Cannot delete - no standard way to overwrite all blocks, only
-    about 80% of the isk is actually available.
-    Cannot recover - "dirty" blocks are erased
-    Self corrosion (Garbage Collection) - SSD writes over unused blocks
-    Model dependent, especially older SSDs may not do this.
-
-    Case, in class discussion
-    % Copy paste from slides
 
 \subsection{Live Forensics}
     Considerations:
